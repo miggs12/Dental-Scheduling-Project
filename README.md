@@ -2,9 +2,9 @@ Dental Scheduling Project
 
 Create venv:
 
-    python3.11 -m venv venv
+    python3.11 -m venv DSPenv
 
-    source venv/bin/activate
+    source DSPenv/bin/activate
 
 to install dependencies:
 
