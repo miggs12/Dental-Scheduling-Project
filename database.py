@@ -9,7 +9,8 @@ def init_database():
     CREATE TABLE IF NOT EXISTS patients (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT NOT NULL,
-        phone TEXT NOT NULL
+        phone TEXT NOT NULL,
+        consent INTEGER DEFAULT 0
     )
     """)
 

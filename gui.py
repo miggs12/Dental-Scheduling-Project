@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 from database import init_database
 import sqlite3
+from sms_reminder import send_sms
 
 class DentalSchedulerApp:
     def __init__(self, root):
@@ -34,20 +35,37 @@ class DentalSchedulerApp:
         tk.Button(self.root, text = "Schedule Appointment", command = self.schedule_appointment).grid(row = 4, column = 0)
         tk.Button(self.root, text = "View Appointment", command = self.view_appointments).grid(row = 4, column = 1)
 
+        #Consent Checkbox
+        self.consent_var = tk.IntVar()
+        self.consent_checkbox = tk.Checkbutton(
+            self.root,
+            text = "I consent to receive SMS reminders",
+            variable = self.consent_var
+        )
+        self.consent_checkbox(row = 5, column = 0, columnspan = 2)
+
     def schedule_appointment(self):
         name = self.name_entry.get()
         phone = self.phone_entry.get()
         procedure = self.procedure_dropdown.get()
         time = self.time_entry.get()
+        consent = self.consent.var.get() #1 if consent, 0 if no consent
 
         #Insert into database
         connection = sqlite3.connect("dental_scheduler.db")
         cursor = connection.cursor()
         cursor.execute("INSERT INTO patients (name, phone) VALUES (?, ?)", (name, phone))
         patient_id = cursor.lastrowid
+
         cursor.execute("INSERT INTO appointments (patient_id, procedure_id, appointment_time) VALUES (?, ?, ?)", (patient_id, 1, time))
         connection.commit()
         connection.close()
+        #Send SMS only if consent is True
+        if consent == 1:
+            send_sms(phone, name, time)
+            print("Your appointment is scheduledand SMS sent!")
+        else:
+            print("Appointment scheduled, but no SMS: Consent not given.")
         print(f'Appointment scheduled for {name} at {time}.')
 
     def view_appointments(self):
