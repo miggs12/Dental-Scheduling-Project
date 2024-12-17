@@ -42,7 +42,7 @@ class DentalSchedulerApp:
             text = "I consent to receive SMS reminders",
             variable = self.consent_var
         )
-        self.consent_checkbox(row = 5, column = 0, columnspan = 2)
+        self.consent_checkbox.grid(row = 5, column = 0, columnspan = 2)
 
     def schedule_appointment(self):
         name = self.name_entry.get()
@@ -86,5 +86,5 @@ class DentalSchedulerApp:
 if __name__ == "__main__":
     init_database()
     root = tk.Tk()
-    app = DentalSchedulerApp()
+    app = DentalSchedulerApp(root)
     root.mainloop()
