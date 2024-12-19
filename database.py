@@ -1,6 +1,20 @@
 import sqlite3
+import shutil
+import os
 
 def init_database():
+    db_name = 'dentalscheduler.db'
+    backup_name = 'dentalschedulerBU.db'
+
+    #Check if db exists
+    if os.path.exists(db_name):
+        print(f'Backing up {db_name} to {backup_name}...')
+        shutil.copy(db_name, backup_name)
+        print('Backup completed!')
+    else:
+        print(f'No existing database found. Skipping backup.')
+
+    #Connect to the database
     connection = sqlite3.connect("dentalscheduler.db")
     cursor = connection.cursor()
 
