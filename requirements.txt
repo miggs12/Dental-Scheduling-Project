@@ -3,4 +3,8 @@ twilio==8.9.0       # For SMS reminders
 #tk                 # Tkinter for GUI (comes with Python)
 schedule==1.2.0     # For scheduling tasks
 python-dotenv       #for global var
-python-tk
+
+
+# Note: tkinter is part of the Python standard library.
+# If you're using macOS or Homebrew, you may need to install it separately:
+# brew install python-tk@3.11

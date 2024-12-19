@@ -13,3 +13,9 @@ to install dependencies:
 or
 
     pip3 install -r requirements.txt
+
+After doing so you will need tkinter for the gui so run:
+
+    brew install python-tk@3.11
+
+    
