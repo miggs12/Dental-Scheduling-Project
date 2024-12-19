@@ -1,6 +1,7 @@
 Dental Scheduling Project
 
 Create venv:
+*Need python3.11 for tkinter library
 
     python3.11 -m venv DSPenv
 
