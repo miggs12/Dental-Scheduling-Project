@@ -49,7 +49,7 @@ class DentalSchedulerApp:
         phone = self.phone_entry.get()
         procedure = self.procedure_dropdown.get()
         time = self.time_entry.get()
-        consent = self.consent.var.get() #1 if consent, 0 if no consent
+        consent = self.consent_var.get() #1 if consent, 0 if no consent
 
         #Insert into database
         connection = sqlite3.connect("dental_scheduler.db")
@@ -63,7 +63,7 @@ class DentalSchedulerApp:
         #Send SMS only if consent is True
         if consent == 1:
             send_sms(phone, name, time)
-            print("Your appointment is scheduledand SMS sent!")
+            print("Your appointment is scheduled and SMS sent!")
         else:
             print("Appointment scheduled, but no SMS: Consent not given.")
         print(f'Appointment scheduled for {name} at {time}.')
