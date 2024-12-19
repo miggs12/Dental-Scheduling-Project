@@ -1,11 +1,13 @@
 import sqlite3
 import shutil
 import os
+import datetime
 
 def init_database():
     db_name = 'dentalscheduler.db'
-    backup_name = 'dentalschedulerBU.db'
-
+    timestamp = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
+    backup_name = f'dentalschedulerBU_{timestamp}.db'
+    
     #Check if db exists
     if os.path.exists(db_name):
         print(f'Backing up {db_name} to {backup_name}...')
