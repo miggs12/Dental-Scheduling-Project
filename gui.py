@@ -52,7 +52,7 @@ class DentalSchedulerApp:
         consent = self.consent_var.get() #1 if consent, 0 if no consent
 
         #Insert into database
-        connection = sqlite3.connect("dental_scheduler.db")
+        connection = sqlite3.connect("dentalscheduler.db")
         cursor = connection.cursor()
         cursor.execute("INSERT INTO patients (name, phone) VALUES (?, ?)", (name, phone))
         patient_id = cursor.lastrowid
@@ -70,7 +70,7 @@ class DentalSchedulerApp:
 
     def view_appointments(self):
         #Display appointments
-        connection = sqlite3.connect("dental_scheduler.db")
+        connection = sqlite3.connect("dentalscheduler.db")
         cursor = connection.cursor()
         cursor.execute("""
         SELECT patients.name, patients.phone, appointments.appointment_time
