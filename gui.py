@@ -50,36 +50,64 @@ class DentalSchedulerApp:
         procedure = self.procedure_dropdown.get()
         time = self.time_entry.get()
         consent = self.consent_var.get() #1 if consent, 0 if no consent
+        conn = None
 
-        #Insert into database
-        connection = sqlite3.connect("dentalscheduler.db")
-        cursor = connection.cursor()
-        cursor.execute("INSERT INTO patients (name, phone) VALUES (?, ?)", (name, phone))
-        patient_id = cursor.lastrowid
+        try:
+            conn = get_connection()
+            cursor = conn.cursor()
+        
+            #Insert into database
+            cursor.execute("INSERT INTO patients (name, phone, consent) VALUES (?, ?, ?)", (name, phone, consent))
+            patient_id = cursor.lastrowid
 
-        cursor.execute("INSERT INTO appointments (patient_id, procedure_id, appointment_time) VALUES (?, ?, ?)", (patient_id, 1, time))
-        connection.commit()
-        connection.close()
-        #Send SMS only if consent is True
-        if consent == 1:
-            send_sms(phone, name, time)
-            print("Your appointment is scheduled and SMS sent!")
-        else:
-            print("Appointment scheduled, but no SMS: Consent not given.")
-        print(f'Appointment scheduled for {name} at {time}.')
+            cursor.execute("INSERT INTO appointments (patient_id, procedure_id, appointment_time) VALUES (?, ?, ?)", (patient_id, 1, time))
+
+            conn.commit()
+            conn.close()
+
+            if consent == 1:
+                send_sms(phone, name, time)
+                print("Your appointment is scheduled and SMS sent!")
+            else:
+                print("Appointment scheduled, but no SMS: Consent not given.")
+            print(f'Appointment scheduled for {name} at {time}.')
+
+            #Send SMS only if consent is True
+            if consent == 1:
+                send_sms(phone, name, time)
+                print("Your appointment is scheduled and SMS sent!")
+            else:
+                print("Appointment scheduled, but no SMS: Consent not given.")
+            print(f'Appointment scheduled for {name} at {time}.')
+        
+        except sqlite3.Error as e:
+            print(f'Database error: {e}')
+        
+        finally:
+            if conn:
+                conn.close()
 
     def view_appointments(self):
         #Display appointments
-        connection = sqlite3.connect("dentalscheduler.db")
-        cursor = connection.cursor()
-        cursor.execute("""
-        SELECT patients.name, patients.phone, appointments.appointment_time
-        FROM appointments
-        JOIN patients ON appointments.patient_id = patient_id
-        """)
-        rows = cursor.fetchall()
-        connection.close()
+        conn = None
+        try:
+            conn = get_connection()
+            cursor = conn.cursor()
+            cursor.execute("""
+            SELECT patients.name, patients.phone, appointments.appointment_time
+            FROM appointments
+            JOIN patients ON appointments.patient_id = patient_id
+            """)
+            rows = cursor.fetchall()
 
+        except sqlite3.Error as e:
+            print(f'Database error: {e}')
+            rows = []
+        
+        finally:
+            if conn:
+                conn.close()
+        
         for row in rows:
             print(row)
 

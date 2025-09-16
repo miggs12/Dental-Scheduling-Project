@@ -3,6 +3,12 @@ import shutil
 import os
 import datetime
 
+def get_connection(db_name):
+    #SQLite connection with foreign keys
+    conn = sqlite3.connect(db_name)
+    conn.execute("PRAGMA foreign_keys = ON")
+    return conn
+
 def init_database():
     db_name = 'dentalscheduler.db'
     timestamp = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
@@ -19,6 +25,9 @@ def init_database():
     #Connect to the database
     connection = sqlite3.connect("dentalscheduler.db")
     cursor = connection.cursor()
+
+    #Enable foreign key contraints
+    cursor.execute("PRAGMA foreign_keys = ON;")
 
     #Create tables
     cursor.execute("""
